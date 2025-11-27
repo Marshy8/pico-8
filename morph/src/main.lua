@@ -18,8 +18,8 @@ local function update_planning()
 		local a=read_plan_input_for(1)
 		if a and #g.plan1 < ACTIONS_PER_ROUND then push_plan(g.plan1,a) end
 		if plan_redo_pressed() then clear_plan(g.plan1) end
-		-- require confirm to advance after exactly filled
-		if #g.plan1==ACTIONS_PER_ROUND and plan_confirm_pressed() then
+		-- allow confirm anytime; missing steps will be no-ops
+		if plan_confirm_pressed() then
 			g.p1_plan_confirmed=true
 			g.state=STATE_PLAN_P2
 		end
@@ -27,7 +27,7 @@ local function update_planning()
 		local a=read_plan_input_for(2)
 		if a and #g.plan2 < ACTIONS_PER_ROUND then push_plan(g.plan2,a) end
 		if plan_redo_pressed() then clear_plan(g.plan2) end
-		if #g.plan2==ACTIONS_PER_ROUND and plan_confirm_pressed() then
+		if plan_confirm_pressed() then
 			g.p2_plan_confirmed=true
 			begin_resolution(g)
 		end
@@ -54,7 +54,9 @@ function _update()
 		g.timer-=1
 		if g.timer<=0 then start_planning(g) end
 	elseif g.state==STATE_GAME_OVER then
-		if anybtnp() then
+		update_game_over(g)
+		if anybtnp() and g.victory and g.victory.finished then
+			stop_victory_effect()
 			g=new_game()
 			start_planning(g)
 		end
@@ -85,9 +87,13 @@ function _draw()
 		draw_confirm_popup(g,2)
 		if g.state==STATE_RESOLVE then draw_resolution_banner(g) end
 	elseif g.state==STATE_GAME_OVER then
-		local msg=(g.winner==1 and "p1 ascends!" or "p2 ascends!")
-		print(msg,40,60,10)
-		print("press any button",34,72,7)
+		draw_players(g)
+		draw_fx()
+		local msg=(g.winner==3 and "both ascend!" or (g.winner==1 and "p1 ascends!" or "p2 ascends!"))
+		print(msg,40,12,10)
+		if g.victory and g.victory.finished then
+			print("press any button",34,108,7)
+		end
 	end
 	camera()
 end

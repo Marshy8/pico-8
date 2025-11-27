@@ -24,12 +24,20 @@ end
 ACTIONS_PER_ROUND=3
 
 -- animation timing (in frames)
-STEP_FRAMES=28 -- duration to play each action step
+STEP_FRAMES=40 -- longer so fireballs are visible
 PROJ_SPEED=4 -- pixels per frame for projectile
 
 -- damage / morph
 BASE_DAMAGE=1
+SP_ASCEND=63
 WIN_MORPHS=4
+
+-- projectile sprite pool (64-70)
+PROJ_POOL={64,65,66,67,68,69,70}
+
+-- character sets: each set is 4 sprites (base, morph1, morph2, morph3)
+-- starting at 1, 5, 9, 13
+CHAR_SETS={{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}}
 
 -- buttons (ids are per PICO-8)
 BTN_LEFT=0
@@ -39,11 +47,11 @@ BTN_DOWN=3
 BTN_O=4
 BTN_X=5
 
--- action ids
+-- actions
 ACT_UP=1
 ACT_DOWN=2
 ACT_ATK=3
-ACT_BLK=4
+ACT_BLUNDER=4
 
 -- state machine ids
 STATE_SPLASH=1

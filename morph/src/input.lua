@@ -8,12 +8,17 @@ function read_plan_input_for(player)
 	local down=btnp(BTN_DOWN,0)
 	local left=btnp(BTN_LEFT,0)
 	local right=btnp(BTN_RIGHT,0)
-	local forward = (player==1) and right or left
-	local back    = (player==1) and left  or right
+	-- explicit mapping: left=blunder for p1, attack for p2; right=attack for p1, blunder for p2
 	if up then return ACT_UP end
 	if down then return ACT_DOWN end
-	if forward then return ACT_ATK end
-	if back then return ACT_BLK end
+	if player==1 then
+		if left then return ACT_BLUNDER end
+		if right then return ACT_ATK end
+	else
+		-- player 2: facing left, so left=attack, right=blunder
+		if left then return ACT_ATK end
+		if right then return ACT_BLUNDER end
+	end
 	return nil
 end
 
@@ -36,7 +41,7 @@ local function violates_triple(plan, act)
 end
 
 function push_plan(plan, act)
-	if act and #plan < ACTIONS_PER_ROUND and not violates_triple(plan, act) then
+	if act and #plan < ACTIONS_PER_ROUND then
 		add(plan, act)
 	end
 end
@@ -49,10 +54,3 @@ function clear_plan(plan)
 	while #plan>0 do deli(plan,#plan) end
 end
 
-function push_plan(plan, act)
-	if act and #plan < ACTIONS_PER_ROUND then add(plan, act) end
-end
-
-function pop_plan(plan)
-	if #plan>0 then deli(plan, #plan) end
-end
