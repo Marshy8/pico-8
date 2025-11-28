@@ -47,13 +47,13 @@ function draw_block(x,y,side)
 	end
 end
 
-function draw_projectile(x,y,frame,proj_spr)
-	local idx=proj_spr or SP_PROJ[(frame%#SP_PROJ)+1]
-	if idx and idx>0 then
-		spr(idx,x-4,y-4)
-	else
-		rectfill(x-2,y-1,x+2,y+1,10)
-	end
+function draw_projectile(x,y,frame,proj_spr,owner)
+       local idx=proj_spr or SP_PROJ[(frame%#SP_PROJ)+1]
+       if idx and idx>0 then
+	       spr(idx,x-4,y-4,1,1,owner==2,false)
+       else
+	       rectfill(x-2,y-1,x+2,y+1,10)
+       end
 end
 
 function draw_hit(x,y,frame)

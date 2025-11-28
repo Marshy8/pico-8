@@ -32,12 +32,12 @@ BASE_DAMAGE=1
 SP_ASCEND=63
 WIN_MORPHS=4
 
--- projectile sprite pool (64-70)
-PROJ_POOL={64,65,66,67,68,69,70}
+-- projectile sprite pool
+PROJ_POOL={64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79}
 
 -- character sets: each set is 4 sprites (base, morph1, morph2, morph3)
--- starting at 1, 5, 9, 13
-CHAR_SETS={{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16}}
+CHAR_SETS={{1,2,3,4},{5,6,7,8},{9,10,11,12},{13,14,15,16},{17,18,19,20},
+		   {21,22,23,24},{25,26,27,28}}
 
 -- buttons (ids are per PICO-8)
 BTN_LEFT=0

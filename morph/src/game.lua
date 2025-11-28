@@ -22,6 +22,22 @@ function new_game()
 	return g
 end
 
+function update_battle_music()
+	-- switch music based on max morph level between both players
+	local max_morph=max(g.p1.morph, g.p2.morph)
+	if max_morph==0 then
+		music(0) -- calm gothic
+	elseif max_morph==1 then
+		music(0) -- calm gothic
+	elseif max_morph==2 then
+		music(1) -- intense
+	elseif max_morph==3 then
+		music(2) -- very intense
+	else
+		music(3) -- extreme (morph 4)
+	end
+end
+
 function start_planning(g)
 	-- advance round counter
 	g.round=g.round+1
@@ -43,6 +59,7 @@ local function consume_double_if_active(attacker)
 	local total_count = attacker.double_count + attacker.current_round_blunders
 	if total_count>0 then
 		local mult=2^total_count
+		-- clear both when consumed during attack
 		attacker.double_count=0
 		attacker.current_round_blunders=0
 		return mult
@@ -105,6 +122,8 @@ function attack_hit(attacker)
 		g.p1.morph=min(WIN_MORPHS, g.p1.morph+morph_gain)
 		g.p2.was_hit=true
 		add_hit(LANE_X_RIGHT, row_y(g.p2.row), is_double)
+		-- update music based on max morph level
+		update_battle_music()
 	else
 		local mult=consume_double_if_active(g.p2)
 		local morph_gain=BASE_DAMAGE*mult
@@ -114,6 +133,8 @@ function attack_hit(attacker)
 		g.p2.morph=min(WIN_MORPHS, g.p2.morph+morph_gain)
 		g.p1.was_hit=true
 		add_hit(LANE_X_LEFT, row_y(g.p1.row), is_double)
+		-- update music based on max morph level
+		update_battle_music()
 	end
 end
 
@@ -125,12 +146,17 @@ local function after_round_check_double(g)
 		-- lose all stacks on hit
 		g.p1.double_count=0
 	end
+	-- always clear current round blunders after processing
+	g.p1.current_round_blunders=0
+	
 	if not g.p2.was_hit then 
 		g.p2.double_count=g.p2.double_count+g.p2.current_round_blunders
 	else
 		-- lose all stacks on hit
 		g.p2.double_count=0
 	end
+	-- always clear current round blunders after processing
+	g.p2.current_round_blunders=0
 end
 
 function update_resolution(g)
@@ -176,6 +202,8 @@ function begin_game_over(g, winner)
 		finished=false
 	}
 	start_victory_effect(winner)
+	-- play holy ascension music
+	music(4)
 end
 
 function update_game_over(g)

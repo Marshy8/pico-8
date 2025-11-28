@@ -97,8 +97,8 @@ function draw_hud(g)
 	-- charge indicators (show total including current round: 2, 4, 8, 16...)
 	local p1_total = g.p1.double_count + g.p1.current_round_blunders
 	local p2_total = g.p2.double_count + g.p2.current_round_blunders
-	if p1_total>0 then print("x"..(2^p1_total).."!",22,12,11) end
-	if p2_total>0 then print("x"..(2^p2_total).."!",94,12,11) end
+	if p1_total>0 then print("x"..(2^p1_total).."!",10,12,11) end
+	if p2_total>0 then print("x"..(2^p2_total).."!",105,12,11) end
 end
 
 function draw_plan_ui(g,who)
@@ -150,5 +150,5 @@ end
 
 function draw_resolution_banner(g)
 	local step=g.step_index
-	print("resolve step "..step.."/"..ACTIONS_PER_ROUND,40,116,9)
+	print("resolve step "..step.."/"..ACTIONS_PER_ROUND,36,10,9)
 end

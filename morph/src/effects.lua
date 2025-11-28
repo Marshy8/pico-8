@@ -109,6 +109,7 @@ function draw_bg_particles()
 end
 
 function add_proj(x,y,dir,owner,proj_spr)
+	sfx(1) -- shoot sound
 	add(fx,{t="proj",x=x,y=y,dir=dir,life=STEP_FRAMES,frame=0,owner=owner,proj_spr=proj_spr})
 end
 
@@ -132,6 +133,7 @@ function stop_victory_effect()
 end
 
 function add_hit(x,y,is_double_hit)
+	sfx(is_double_hit and 2 or 3) -- blunder/2x hit or normal hit sound
 	add(fx,{t="hit",x=x,y=y,life=16,frame=0})
 	shake_timer=is_double_hit and 10 or 6
 	shake_mag=is_double_hit and 3 or 2
@@ -188,7 +190,7 @@ function draw_fx()
 	draw_bg_particles()
 	for f in all(fx) do
 		if f.t=="proj" then
-			draw_projectile(f.x,f.y,f.frame,f.proj_spr)
+			   draw_projectile(f.x,f.y,f.frame,f.proj_spr,f.owner)
 		elseif f.t=="hit" then
 			draw_hit(f.x,f.y,f.frame)
 		elseif f.t=="spark" then
